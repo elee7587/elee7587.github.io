@@ -1,5 +1,5 @@
 // Load data
-d3.csv("data/covid_data.csv").then(data => {
+d3.csv("data/countr_vaccination.csv").then(data => {
     // Parse numbers, dates, etc.
     data.forEach(d => {
       d.date = new Date(d.date);
