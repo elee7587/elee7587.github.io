@@ -162,10 +162,16 @@ function updateScene() {
     d3.select("#annotation").text(annotations[currentScene]);
   
     if (currentScene === 0) {
+      d3.select("#scene1-content").style("display", "block");
+      d3.select("#scene2-content").style("display", "none");
       drawBarChart(latestData);
     } else if (currentScene === 1) {
+      d3.select("#scene1-content").style("display", "none");
+      d3.select("#scene2-content").style("display", "block")
       drawBarChartPerHundred(perCapitaData);
     } else {
+      d3.select("#scene1-content").style("display", "none");
+      d3.select("#scene2-content").style("display", "none");
       d3.select("#viz").append("p").text("More interactive exploration coming soon!");
     }
 }

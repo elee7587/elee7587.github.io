@@ -15,24 +15,26 @@
     <button id="prevBtn">Previous</button>
     <button id="nextBtn">Next</button>
   </div>
-
-  <h2>Top 15 Countries by Total Vaccinations </h2>
-  <div id="viz"></div>
-  <!-- SCRIPT -->
+  <div id="scene1-content">
+    <h2>Top 15 Countries by Total Vaccinations </h2>
+    <!-- Summary-->
+    <p> 
+      As of March 2022, these are the top 15 countries by total COVID-19 vaccinations. An important thing to note
+      is that these values include both high-population nations like India and the U.S., and countries with robust healthcare systems.
+      While these numbers show the scale and magnitude of vaccinations, they don't reflect the full story. We will dive into other features including
+      per-capita, # of people vaccinated, etc. 
+    </p>
+    <div id="viz"></div>
+  </div>
   
-  <!-- Summary-->
-  <p> 
-    As of March 2022, these are the top 15 countries by total COVID-19 vaccinations. An important thing to note
-    is that these values include both high-population nations like India and the U.S., and countries with robust healthcare systems.
-    While these numbers show the scale and magnitude of vaccinations, they don't reflect the full story. We will dive into other features including
-    per-capita, # of people vaccinated, etc. 
-  </p>
-  <h2> Top 15 Countries by Total Vaccinations per 100 People</h2>
-  <p>
-    This view adjusts for population size. It shows the countries that have vaccinated the highest proportion of people, not just
-    the highest number of people. Countries with a stronger healthcare infrastruture dominate this chart.
-  </p>
-  <div id="viz2"></div>
+  <div id="scene2-content">
+    <h2> Top 15 Countries by Total Vaccinations per 100 People</h2>
+    <p>
+        This view adjusts for population size. It shows the countries that have vaccinated the highest proportion of people, not just
+        the highest number of people. Countries with a stronger healthcare infrastruture dominate this chart.
+    </p>
+    <div id="viz2"></div>
+</div>
   <script src="script.js"></script>
 </body>
 </html>
