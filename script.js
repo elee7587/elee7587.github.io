@@ -20,7 +20,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
   });
   function drawBarChart(data) {
     const margin = { top: 30, right: 30, bottom: 40, left: 150 };
-    const width = 800 - margin.left - margin.right;
+    const width = 900 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
   
     const svg = d3.select("#viz")
