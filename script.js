@@ -25,7 +25,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
         .sort((a, b) => b.total - a.total)
         .slice(0, 15);
     drawBarChart(latestData);
-    drawBarChartPerHundred();
+    drawBarChartPerHundred(Array.from(perCapitaMap.values()));
   });
 //first chart
 function drawBarChart(data) {
