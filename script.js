@@ -30,7 +30,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
 //first chart
 function drawBarChart(data) {
 const margin = { top: 30, right: 200, bottom: 40, left: 150 };
-const width = 900 - margin.left - margin.right;
+const width = 800 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
 const svg = d3.select("#viz")
@@ -89,7 +89,7 @@ const top15 = Array.from(perCapitaMap.values())
     .slice(0, 15);
 
 const margin = { top: 30, right: 100, bottom: 40, left: 150 };
-const width = 900 - margin.left - margin.right;
+const width = 800 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
 const svg = d3.select("#viz2")
@@ -134,3 +134,45 @@ svg.selectAll("text.label")
     .text(d => d.perHundred.toFixed(1))
     .style("font-size", "12px");
 }
+
+// Optional helper functions to show/hide elements
+function showIntroChart() {
+    console.log("Showing Intro Step");
+    // You can trigger animations, show/hide elements, or update content here
+  }
+  
+  function showLineChart() {
+    console.log("Showing Case Trends");
+    // e.g., update an SVG or draw a new chart here
+  }
+  
+  function showPerCapitaChart() {
+    console.log("Showing Deaths & Vaccination Rates");
+    // You could scroll to #viz2 or highlight that area
+  }
+  
+  // Scroll-triggered behavior
+  const steps = d3.selectAll(".step");
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const step = entry.target.getAttribute("data-step");
+        console.log("Now at step", step);
+  
+        // Update visual based on step
+        if (step === "1") {
+          showIntroChart();
+        } else if (step === "2") {
+          showLineChart();
+        } else if (step === "3") {
+          showPerCapitaChart();
+        }
+        // Add more steps if needed
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  steps.each(function () {
+    observer.observe(this);
+  });
