@@ -1,1 +1,29 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>COVID-19 Martini Glass Visualization</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>COVID-19 Trends</h1>
+
+  <!-- SCROLLABLE NARRATIVE SECTIONS -->
+  <div id="scrolly">
+    <div id="graphic">
+      <svg width="800" height="500"></svg>
+    </div>
+    <div id="text">
+      <div class="step" data-step="1">Introduction: What is COVID-19?</div>
+      <div class="step" data-step="2">Case trends over time</div>
+      <div class="step" data-step="3">Deaths and vaccination rates</div>
+      <div class="step" data-step="4">Interactive exploration begins...</div>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script src="script.js"></script>
+</body>
+</html>
