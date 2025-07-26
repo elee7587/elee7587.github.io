@@ -5,7 +5,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
     data.forEach(d => {
         const date = d.date;
         const country = d.country;
-        const total = +d.total_vaccinations;
+        const total = d.total_vaccinations;
 
         if (!countryMap.has(country) || countryMap.get(country).date < date) {
             countryMap.set(country, {country, date, total});
