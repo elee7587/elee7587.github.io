@@ -1,6 +1,16 @@
 // Load data
 const countryMap = new Map();
 const perCapitaMap = new Map();
+let latestData = [];
+let perCapitaData = [];
+
+let currentScene = 0; // Parameter to track which scene is active
+
+const annotations = [
+  "Scene 1: Overview of total COVID-19 vaccinations by country.",
+  "Scene 2: Vaccinations per 100 people to adjust for population size.",
+  "Scene 3: Interactive exploration or additional insights can go here."
+];
 
 d3.csv("data/country_vaccinations.csv").then(data => {
     // Parse numbers, dates, etc.
@@ -20,12 +30,17 @@ d3.csv("data/country_vaccinations.csv").then(data => {
 
     });
 
-    let latestData = Array.from(countryMap.values())
+    latestData = Array.from(countryMap.values())
         .filter(d => !isNaN(d.total))
         .sort((a, b) => b.total - a.total)
         .slice(0, 15);
-    drawBarChart(latestData);
-    drawBarChartPerHundred(Array.from(perCapitaMap.values()));
+
+    perCapitaData = Array.from(perCapitaMap.values())
+        .filter(d => !isNaN(d.perHundred))
+        .sort((a, b) => b.perHundred - a.perHundred)
+        .slice(0, 15);
+
+    updateScene(); // Initially show scene 0
   });
 //first chart
 function drawBarChart(data) {
@@ -134,3 +149,36 @@ svg.selectAll("text.label")
     .text(d => d.perHundred.toFixed(1))
     .style("font-size", "12px");
 }
+
+function clearCharts() {
+    d3.select("#viz").selectAll("*").remove();
+}
+
+function updateScene() {
+    clearCharts();
+  
+    // Update annotation text
+    d3.select("#annotation").text(annotations[currentScene]);
+  
+    if (currentScene === 0) {
+      drawBarChart(latestData);
+    } else if (currentScene === 1) {
+      drawBarChartPerHundred(perCapitaData);
+    } else {
+      d3.select("#viz").append("p").text("More interactive exploration coming soon!");
+    }
+}
+
+d3.select("#nextBtn").on("click", () => {
+    if (currentScene < annotations.length - 1) {
+      currentScene++;
+      updateScene();
+    }
+});
+  
+d3.select("#prevBtn").on("click", () => {
+    if (currentScene > 0) {
+      currentScene--;
+      updateScene();
+    }
+});
