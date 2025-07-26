@@ -1,5 +1,5 @@
 // Load data
-d3.csv("data/country_vaccination.csv").then(data => {
+d3.csv("data/country_vaccinations.csv").then(data => {
     // Parse numbers, dates, etc.
     const countryMap = new Map();
     data.forEach(d => {
