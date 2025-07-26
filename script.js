@@ -162,6 +162,7 @@ function updateScene() {
     d3.select("#annotation").text(annotations[currentScene]);
   
     if (currentScene === 0) {
+      d3.select("#annotation").text(annotations[currentScene]);
       drawBarChart(latestData);
     } else if (currentScene === 1) {
       drawBarChartPerHundred(perCapitaData);
