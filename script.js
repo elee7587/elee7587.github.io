@@ -152,6 +152,7 @@ svg.selectAll("text.label")
 
 function clearCharts() {
     d3.select("#viz").selectAll("*").remove();
+    d3.select("#viz2").selectAll("*").remove();
 }
 
 function updateScene() {

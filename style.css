@@ -23,35 +23,6 @@ body {
     margin-bottom: 1.5em;
   }
   
-  /* Scrollytelling layout */
-  #scrolly {
-    display: flex;
-    flex-direction: row;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 50px;
-    gap: 20px;
-  }
-  
-  #graphic {
-    position: sticky;
-    top: 20px;
-    flex: 1;
-  }
-  
-  #text {
-    flex: 1;
-  }
-  
-  .step {
-    margin-bottom: 100vh; /* Each step takes up a full screen height */
-    font-size: 1.25rem;
-    padding: 20px;
-    background: #fff;
-    border-left: 4px solid lightgray;
-    transition: border-left-color 0.3s;
-  }
-  
   .step.active {
     border-left-color: steelblue;
     background-color: #f0f8ff;
