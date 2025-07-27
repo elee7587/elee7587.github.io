@@ -1,8 +1,8 @@
 // Load data
 const countryMap = new Map();
-const perCapitaMap = new Map();
+const per100Map = new Map();
 let latestData = [];
-let perCapitaData = [];
+let per100Data = [];
 
 let currentScene = 0; // Parameter to track which scene is active
 
@@ -19,15 +19,15 @@ d3.csv("data/country_vaccinations.csv").then(data => {
         const date = d.date;
         const country = d.country;
         const total = d.total_vaccinations;
-        const perHundred = +d.total_vaccinations_per_hundred
+        const perHundred = +d.total_vaccinations_per_hundred;
+        const daily_vaccinations_per_m = +d.daily_vaccinations_per_million
 
         if (!countryMap.has(country) || countryMap.get(country).date < date) {
             countryMap.set(country, {country, date, total});
         }
-        if (!perCapitaMap.has(country) || perCapitaMap.get(country).date < date) {
-            perCapitaMap.set(country, { country, date, perHundred });
+        if (!per100Map.has(country) || per100Map.get(country).date < date) {
+            per100Map.set(country, { country, date, perHundred });
         }
-
     });
 
     latestData = Array.from(countryMap.values())
@@ -35,11 +35,30 @@ d3.csv("data/country_vaccinations.csv").then(data => {
         .sort((a, b) => b.total - a.total)
         .slice(0, 15);
 
-    perCapitaData = Array.from(perCapitaMap.values())
+    per100Data = Array.from(per100Map.values())
         .filter(d => !isNaN(d.perHundred))
         .sort((a, b) => b.perHundred - a.perHundred)
         .slice(0, 15);
-
+        const topTotalCountries = Array.from(
+            d3.rollup(data, v => d3.max(v, d => +d.total_vaccinations), d => d.country)
+          )
+          .sort((a, b) => d3.descending(a[1], b[1]))
+          .slice(0, 15)
+          .map(d => d[0]);
+      
+          const topPer100Countries = Array.from(
+            d3.rollup(data, v => d3.max(v, d => +d.total_vaccinations_per_hundred), d => d.country)
+          )
+          .sort((a, b) => d3.descending(a[1], b[1]))
+          .slice(0, 15)
+          .map(d => d[0]);
+      
+          // Save globally so you can access in any scene
+          window.topTotalCountries = topTotalCountries;
+          window.topPer100Countries = topPer100Countries;
+          window.allTopCountries = [...new Set([...topTotalCountries, ...topPer100Countries])];
+      
+    globalData = data;
     updateScene(); // Initially show scene 0
   });
 //first chart
@@ -99,7 +118,7 @@ svg.selectAll("text.label")
 //second chart 
 function drawBarChartPerHundred(data) {
 
-const top15 = Array.from(perCapitaMap.values())
+const top15 = Array.from(per100Map.values())
     .filter(d => !isNaN(d.perHundred))
     .sort((a, b) => b.perHundred - a.perHundred)
     .slice(0, 15);
@@ -151,9 +170,82 @@ svg.selectAll("text.label")
     .style("font-size", "12px");
 }
 
+//third graph
+function drawLineChart(filteredData) {
+    d3.select("#viz").selectAll("*").remove(); // Clear old chart
+  
+    const margin = { top: 50, right: 200, bottom: 50, left: 60 };
+    const width = 1000 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+  
+    const svg = d3.select("#viz3")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+  
+    // Parse dates
+    const parseDate = d3.timeParse("%Y-%m-%d");
+    filteredData.forEach(d => {
+      d.date = parseDate(d.date);
+      d.daily_vaccinations_per_million = +d.daily_vaccinations_per_million;
+    });
+  
+    // Nest data by country
+    const dataByCountry = d3.groups(filteredData, d => d.country);
+  
+    const x = d3.scaleTime()
+      .domain(d3.extent(filteredData, d => d.date))
+      .range([0, width]);
+  
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(filteredData, d => d.daily_vaccinations_per_million)])
+      .nice()
+      .range([height, 0]);
+  
+    const color = d3.scaleOrdinal()
+      .domain(window.allTopCountries)
+      .range(d3.schemeCategory10.concat(d3.schemeSet3));
+  
+    // Add axes
+    svg.append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(d3.axisBottom(x));
+  
+    svg.append("g")
+      .call(d3.axisLeft(y));
+  
+    // Draw lines
+    const line = d3.line()
+      .x(d => x(d.date))
+      .y(d => y(d.daily_vaccinations_per_million));
+  
+    svg.selectAll(".line")
+      .data(dataByCountry)
+      .enter()
+      .append("path")
+      .attr("fill", "none")
+      .attr("stroke", d => color(d[0]))
+      .attr("stroke-width", 1.5)
+      .attr("d", d => line(d[1].sort((a, b) => a.date - b.date)));
+  
+    // Legend
+    svg.selectAll(".legend")
+      .data(dataByCountry.map(d => d[0]))
+      .enter()
+      .append("text")
+      .attr("x", width + 10)
+      .attr("y", (d, i) => i * 15)
+      .text(d => d)
+      .style("fill", d => color(d))
+      .style("font-size", "10px");
+  }
+
 function clearCharts() {
     d3.select("#viz").selectAll("*").remove();
     d3.select("#viz2").selectAll("*").remove();
+    d3.select("#viz3").selectAll("*").remove();
 }
 
 function updateScene() {
@@ -165,14 +257,22 @@ function updateScene() {
     if (currentScene === 0) {
       d3.select("#scene1-content").style("display", "block");
       d3.select("#scene2-content").style("display", "none");
+      d3.select("#scene3-content").style("display", "none");
       drawBarChart(latestData);
     } else if (currentScene === 1) {
       d3.select("#scene1-content").style("display", "none");
-      d3.select("#scene2-content").style("display", "block")
-      drawBarChartPerHundred(perCapitaData);
+      d3.select("#scene2-content").style("display", "block");
+      d3.select("#scene3-content").style("display", "none");
+      drawBarChartPerHundred(per100Data);
+    } else if (currentScene === 2){
+      d3.select("#scene1-content").style("display", "none");
+      d3.select("#scene2-content").style("display", "none");
+      d3.select("#scene3-content").style("display", "block");
+      drawLineChart(globalData.filter(d => window.allTopCountries.includes(d.country)));
     } else {
       d3.select("#scene1-content").style("display", "none");
       d3.select("#scene2-content").style("display", "none");
+      d3.select("#scene3-content").style("display", "none");
       d3.select("#viz").append("p").text("More interactive exploration coming soon!");
     }
 }
