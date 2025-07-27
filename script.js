@@ -73,7 +73,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
   });
 //first chart
 function drawBarChart(data) {
-    const margin = { top: 50, right: 150, bottom: 150, left: 100 };
+    const margin = { top: 50, right: 150, bottom: 100, left: 100 };
     const width = 600 - margin.left - margin.right;
     const height = 350 - margin.top - margin.bottom;
 
@@ -131,7 +131,7 @@ function drawBarChart(data) {
     g.append("text")
         .attr("class", "x axis-label")
         .attr("x", width / 2)             // center horizontally
-        .attr("y", height + margin.bottom - 100)  // below the x-axis ticks
+        .attr("y", height + margin.bottom - 75)  // below the x-axis ticks
         .attr("text-anchor", "middle")    // center text
         .style("font-size", "11px")
         .text("Total Vaccinations");
@@ -156,8 +156,8 @@ function drawBarChart(data) {
           .attr("viewBox", "0 -5 10 10")
           .attr("refX", 5)
           .attr("refY", 0)
-          .attr("markerWidth", 6)
-          .attr("markerHeight", 6)
+          .attr("markerWidth", 4)
+          .attr("markerHeight", 5)
           .attr("orient", "auto")
           .append("path")
           .attr("d", "M0,-5L10,0L0,5")
@@ -170,7 +170,7 @@ function drawBarChart(data) {
           .attr("x2", cx)
           .attr("y2", cy)
           .attr("stroke", "black")
-          .attr("stroke-width", 2)
+          .attr("stroke-width", 1.5)
           .attr("marker-end", "url(#arrowhead)");
   
         // Add explanatory text
@@ -245,6 +245,21 @@ g.selectAll("text.label")
     .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
     .text(d => d.perHundred.toFixed(1))
     .style("font-size", "12px");
+g.append("text")
+    .attr("class", "x axis-label")
+    .attr("x", width / 2)             // center horizontally
+    .attr("y", height + margin.bottom - 75)  // below the x-axis ticks
+    .attr("text-anchor", "middle")    // center text
+    .style("font-size", "11px")
+    .text("Vaccinations per 100 People");
+g.append("text")
+    .attr("class", "y axis-label")
+    .attr("x", -height / 2)       // center along y axis (rotated)
+    .attr("y", -margin.left + 15) // position to left of axis
+    .attr("transform", "rotate(-90)")
+    .attr("text-anchor", "middle")
+    .style("font-size", "11px")
+    .text("Country");
     g.selectAll("rect").each(function(d) {
         if (d.country === "Gibraltar") {
           const bbox = this.getBBox();
