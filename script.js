@@ -177,7 +177,7 @@ const top15 = Array.from(per100Map.values())
 
 const margin = { top: 30, right: 100, bottom: 40, left: 150 };
 const width = 1300 - margin.left - margin.right;
-const height = 650 - margin.top - margin.bottom;
+const height = 700 - margin.top - margin.bottom;
 
 const svg = d3.select("#viz2")
     .append("svg")
