@@ -146,7 +146,7 @@ function drawBarChart(data) {
         // Add arrow line
         svg.append("line")
           .attr("x1", cx)
-          .attr("y1", cy - 70)
+          .attr("y1", cy - 20)
           .attr("x2", cx)
           .attr("y2", cy)
           .attr("stroke", "black")
