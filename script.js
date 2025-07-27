@@ -251,7 +251,7 @@ function drawAllLinesChart(filteredData) {
   
     if (countryData.length === 0) return;
   
-    const margin = { top: 50, right: 100, bottom: 50, left: 60 };
+    const margin = { top: 50, right: 200, bottom: 50, left: 60 };
     const width = 1000 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
   
