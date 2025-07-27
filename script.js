@@ -77,12 +77,18 @@ function drawBarChart(data) {
     const width = 1500 - margin.left - margin.right;
     const height = 800 - margin.top - margin.bottom;
   
+    const svgWidth = 1000;
+    const svgHeight = 600;
+    
     const svg = d3.select("#viz")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", `translate(${margin.left},${margin.top})`);
+      .append("svg")
+      .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
+      .classed("responsive-svg", true);
+    
+    const g = svg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+    
   
     const x = d3.scaleLog()
         .base(2)

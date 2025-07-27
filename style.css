@@ -23,6 +23,11 @@ display: none;
   #viz, #viz2 {
     margin-bottom: 50px;
   }
+  .chart-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
   
   /* Add space between sections */
   p {
