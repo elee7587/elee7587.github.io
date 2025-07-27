@@ -24,7 +24,7 @@ display: none;
     margin-bottom: 50px;
   }
   .chart-container svg {
-    width: 90%;
+    width: 80%;
     height: auto;
     display: block;
   }

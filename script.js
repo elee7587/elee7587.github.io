@@ -131,7 +131,7 @@ function drawBarChart(data) {
     g.append("text")
         .attr("class", "x axis-label")
         .attr("x", width / 2)             // center horizontally
-        .attr("y", height + margin.bottom - 30)  // below the x-axis ticks
+        .attr("y", height + margin.bottom - 15)  // below the x-axis ticks
         .attr("text-anchor", "middle")    // center text
         .style("font-size", "11px")
         .text("Total Vaccinations");
@@ -296,7 +296,7 @@ g.append("text")
             .attr("y", cy - 20)
             .attr("text-anchor", "middle")
             .text("Gilbraltar has a population of just under 40,000.")
-            .style("font-size", "12px")
+            .style("font-size", "9px")
             .style("font-family", "sans-serif");
           g.select(".annotation-label").raise();
         }
