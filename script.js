@@ -73,14 +73,14 @@ d3.csv("data/country_vaccinations.csv").then(data => {
   });
 //first chart
 function drawBarChart(data) {
-    const margin = { top: 50, right: 150, bottom: 50, left: 100 };
-    const width = 600 - margin.left - margin.right;
-    const height = 350 - margin.top - margin.bottom;
+    const margin = { top: 50, right: 50, bottom: 50, left: 100 };
+    const width = 500 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
 
     
     const svg = d3.select("#viz")
       .append("svg")
-      .attr("viewBox", `0 0 ${600} ${350}`)
+      .attr("viewBox", `0 0 ${500} ${300}`)
       .attr("preserveAspectRatio", "xMidYMid meet")
       .style("width", "100%")
       .style("height", "auto")
