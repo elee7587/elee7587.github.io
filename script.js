@@ -185,11 +185,16 @@ const margin = { top: 30, right: 100, bottom: 40, left: 150 };
 const width = 1300 - margin.left - margin.right;
 const height = 700 - margin.top - margin.bottom;
 
+
 const svg = d3.select("#viz2")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
+    .attr("viewBox", `0 0 ${800} ${500}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .style("width", "100%")
+    .style("height", "auto")
+    .classed("responsive-svg", true);
+
+const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const x = d3.scaleLinear()
@@ -201,13 +206,13 @@ const y = d3.scaleBand()
     .range([0, height])
     .padding(0.2);
 
-svg.append("g").call(d3.axisLeft(y));
+g.append("g").call(d3.axisLeft(y));
 
-svg.append("g")
+g.append("g")
     .attr("transform", `translate(0, ${height})`)
     .call(d3.axisBottom(x).ticks(5));
 
-svg.selectAll("rect")
+g.selectAll("rect")
     .data(top15)
     .enter()
     .append("rect")
@@ -217,7 +222,7 @@ svg.selectAll("rect")
     .attr("height", y.bandwidth())
     .attr("fill", "#4daf4a");
 
-svg.selectAll("text.label")
+g.selectAll("text.label")
     .data(top15)
     .enter()
     .append("text")
@@ -226,14 +231,14 @@ svg.selectAll("text.label")
     .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
     .text(d => d.perHundred.toFixed(1))
     .style("font-size", "12px");
-    svg.selectAll("rect").each(function(d) {
+    g.selectAll("rect").each(function(d) {
         if (d.country === "Gibraltar") {
           const bbox = this.getBBox();
           const cx = bbox.x + bbox.width / 2;
           const cy = bbox.y;
     
           // Add arrowhead marker
-          svg.append("defs").append("marker")
+          g.append("defs").append("marker")
             .attr("id", "arrowhead")
             .attr("viewBox", "0 -5 10 10")
             .attr("refX", 5)
@@ -246,7 +251,7 @@ svg.selectAll("text.label")
             .attr("fill", "black");
     
           // Add arrow line
-          svg.append("line")
+          g.append("line")
             .attr("x1", cx)
             .attr("y1", cy - 20)
             .attr("x2", cx)
@@ -256,7 +261,7 @@ svg.selectAll("text.label")
             .attr("marker-end", "url(#arrowhead)");
     
           // Add explanatory text
-          svg.append("text")
+          g.append("text")
             .attr("class", "annotation-label")
             .attr("x", cx)
             .attr("y", cy - 20)
@@ -264,7 +269,7 @@ svg.selectAll("text.label")
             .text("Gilbraltar has a population of just under 40,000.")
             .style("font-size", "12px")
             .style("font-family", "sans-serif");
-          svg.select(".annotation-label").raise();
+          g.select(".annotation-label").raise();
         }
       });
 }
