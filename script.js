@@ -128,7 +128,21 @@ function drawBarChart(data) {
         .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
         .text(d => d.total.toLocaleString())
         .style("font-size", "12px");
-  
+    g.append("text")
+        .attr("class", "x axis-label")
+        .attr("x", width / 2)             // center horizontally
+        .attr("y", height + margin.bottom - 10)  // below the x-axis ticks
+        .attr("text-anchor", "middle")    // center text
+        .style("font-size", "14px")
+        .text("X Axis Label (e.g., Total Vaccinations)");
+    g.append("text")
+        .attr("class", "y axis-label")
+        .attr("x", -height / 2)       // center along y axis (rotated)
+        .attr("y", -margin.left + 15) // position to left of axis
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .style("font-size", "14px")
+        .text("Y Axis Label (e.g., Country)");
     // Add arrow and annotation **after** drawing is complete
     g.selectAll("rect").each(function(d) {
       if (d.country === "China") {
