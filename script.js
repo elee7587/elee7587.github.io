@@ -73,57 +73,97 @@ d3.csv("data/country_vaccinations.csv").then(data => {
   });
 //first chart
 function drawBarChart(data) {
-const margin = { top: 30, right: 200, bottom: 40, left: 150 };
-const width = 1500 - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
-
-const svg = d3.select("#viz")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-
-const x = d3.scaleLog()
-    .base(2)
-    .domain([1, d3.max(data, d => d.total)])
-    .range([0, width]);
-
-const y = d3.scaleBand()
-    .domain(data.map(d => d.country))
-    .range([0, height])
-    .padding(0.2);
-
-svg.append("g")
-    .call(d3.axisLeft(y));
-
-svg.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x).ticks(5))
-    .selectAll("text")
-    .style("text-anchor", "middle");
-
-svg.selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", 0)
-    .attr("y", d => y(d.country))
-    .attr("width", d => x(d.total))
-    .attr("height", y.bandwidth())
-    .attr("fill", "steelblue");
-
-svg.selectAll("text.label")
-    .data(data)
-    .enter()
-    .append("text")
-    .attr("class", "label")
-    .attr("x", d => x(d.total) + 5)
-    .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
-    .text(d => d.total.toLocaleString())
-    .style("font-size", "12px");
-}
-
+    const margin = { top: 30, right: 200, bottom: 40, left: 150 };
+    const width = 1500 - margin.left - margin.right;
+    const height = 600 - margin.top - margin.bottom;
+  
+    const svg = d3.select("#viz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+  
+    const x = d3.scaleLog()
+        .base(2)
+        .domain([1, d3.max(data, d => d.total)])
+        .range([0, width]);
+  
+    const y = d3.scaleBand()
+        .domain(data.map(d => d.country))
+        .range([0, height])
+        .padding(0.2);
+  
+    svg.append("g")
+        .call(d3.axisLeft(y));
+  
+    svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x).ticks(5))
+        .selectAll("text")
+        .style("text-anchor", "middle");
+  
+    svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", d => y(d.country))
+        .attr("width", d => x(d.total))
+        .attr("height", y.bandwidth())
+        .attr("fill", "steelblue");
+  
+    svg.selectAll("text.label")
+        .data(data)
+        .enter()
+        .append("text")
+        .attr("class", "label")
+        .attr("x", d => x(d.total) + 5)
+        .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
+        .text(d => d.total.toLocaleString())
+        .style("font-size", "12px");
+  
+    // Add arrow and annotation **after** drawing is complete
+    svg.selectAll("rect").each(function(d) {
+      if (d.country === "China") {
+        const bbox = this.getBBox();
+        const cx = bbox.x + bbox.width / 2;
+        const cy = bbox.y;
+  
+        // Add arrowhead marker
+        svg.append("defs").append("marker")
+          .attr("id", "arrowhead")
+          .attr("viewBox", "0 -5 10 10")
+          .attr("refX", 5)
+          .attr("refY", 0)
+          .attr("markerWidth", 6)
+          .attr("markerHeight", 6)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M0,-5L10,0L0,5")
+          .attr("fill", "black");
+  
+        // Add arrow line
+        svg.append("line")
+          .attr("x1", cx)
+          .attr("y1", cy - 50)
+          .attr("x2", cx)
+          .attr("y2", cy)
+          .attr("stroke", "black")
+          .attr("stroke-width", 2)
+          .attr("marker-end", "url(#arrowhead)");
+  
+        // Add explanatory text
+        svg.append("text")
+          .attr("x", cx)
+          .attr("y", cy - 60)
+          .attr("text-anchor", "middle")
+          .text("China has the highest vaccination total")
+          .style("font-size", "12px")
+          .style("font-family", "sans-serif");
+      }
+    });
+  }
 
 //second chart 
 function drawBarChartPerHundred(data) {
