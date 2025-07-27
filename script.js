@@ -131,7 +131,7 @@ function drawBarChart(data) {
     g.append("text")
         .attr("class", "x axis-label")
         .attr("x", width / 2)             // center horizontally
-        .attr("y", height + margin.bottom - 75)  // below the x-axis ticks
+        .attr("y", height + margin.bottom - 60)  // below the x-axis ticks
         .attr("text-anchor", "middle")    // center text
         .style("font-size", "11px")
         .text("Total Vaccinations");
@@ -195,7 +195,7 @@ const top15 = Array.from(per100Map.values())
     .sort((a, b) => b.perHundred - a.perHundred)
     .slice(0, 15);
 
-const margin = { top: 30, right: 100, bottom: 40, left: 150 };
+const margin = { top: 30, right: 100, bottom: 100, left: 150 };
 const width = 800 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
@@ -248,7 +248,7 @@ g.selectAll("text.label")
 g.append("text")
     .attr("class", "x axis-label")
     .attr("x", width / 2)             // center horizontally
-    .attr("y", height + margin.bottom - 75)  // below the x-axis ticks
+    .attr("y", height + margin.bottom - 30)  // below the x-axis ticks
     .attr("text-anchor", "middle")    // center text
     .style("font-size", "11px")
     .text("Vaccinations per 100 People");
@@ -308,15 +308,18 @@ function drawAllLinesChart(filteredData) {
     d3.select("#viz3").selectAll("*").remove(); // Clear old chart
 
     const margin = { top: 50, right: 200, bottom: 50, left: 60 };
-    const width = 1000 - margin.left - margin.right;
+    const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
   
     const svg = d3.select("#viz3")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+        .append("svg")
+        .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .style("width", "100%")
+        .style("height", "auto")
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
   
     const parseDate = d3.timeParse("%Y-%m-%d");
     filteredData.forEach(d => {
@@ -379,15 +382,18 @@ function drawAllLinesChart(filteredData) {
     if (countryData.length === 0) return;
   
     const margin = { top: 50, right: 200, bottom: 50, left: 60 };
-    const width = 1000 - margin.left - margin.right;
+    const width = 800 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
   
     const svg = d3.select("#viz3")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+        .append("svg")
+        .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .style("width", "100%")
+        .style("height", "auto")
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+  
   
     const parseDate = d3.timeParse("%Y-%m-%d");
     countryData.forEach(d => {
