@@ -45,8 +45,8 @@ d3.csv("data/country_vaccinations.csv").then(data => {
 //first chart
 function drawBarChart(data) {
 const margin = { top: 30, right: 200, bottom: 40, left: 150 };
-const width = 1200 - margin.left - margin.right;
-const height = 1200 - margin.top - margin.bottom;
+const width = 1000 - margin.left - margin.right;
+const height = 700 - margin.top - margin.bottom;
 
 const svg = d3.select("#viz")
     .append("svg")
@@ -55,8 +55,8 @@ const svg = d3.select("#viz")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-const x = d3.scaleLinear()
-    .domain([0, d3.max(data, d => d.total)])
+const x = d3.scalelog()
+    .domain([1, d3.max(data, d => d.total)])
     .range([0, width]);
 
 const y = d3.scaleBand()
