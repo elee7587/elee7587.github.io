@@ -7,6 +7,13 @@ body {
     background-color: #fafafa;
     color: #333;
   }
+#scene1-content {
+display: block;
+}
+
+#scene2-content, #scene3-content {
+display: none;
+}
   
   h1, h2 {
     color: #222;
