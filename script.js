@@ -4,6 +4,8 @@ const per100Map = new Map();
 let latestData = [];
 let per100Data = [];
 let globalMaxY;
+let globalMaxX;
+let globalMinX;
 let currentScene = 0; // Parameter to track which scene is active
 
 const annotations = [
@@ -21,7 +23,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
         const total = d.total_vaccinations;
         const perHundred = +d.total_vaccinations_per_hundred;
         const daily_vaccinations_per_m = +d.daily_vaccinations_per_million
-
+        d.parsedDate = d3.timeParse("%Y-%m-%d")(d.date);
         if (!countryMap.has(country) || countryMap.get(country).date < date) {
             countryMap.set(country, {country, date, total});
         }
@@ -60,6 +62,9 @@ d3.csv("data/country_vaccinations.csv").then(data => {
       
     globalData = data;
     globalMaxY = d3.max(globalData, d => +d.daily_vaccinations_per_million) * 1.05;
+    globalMinX = d3.min(globalData, d => d.parsedDate);
+    globalMaxX = d3.max(globalData, d => d.parsedDate);
+
 
     updateScene(); // Initially show scene 0
   });
@@ -196,7 +201,7 @@ function drawAllLinesChart(filteredData) {
     const dataByCountry = d3.groups(filteredData, d => d.country);
   
     const x = d3.scaleTime()
-      .domain(d3.extent(filteredData, d => d.date))
+      .domain([globalMinX, globalMaxX])
       .range([0, width]);
   
     const y = d3.scaleLinear()
@@ -264,7 +269,7 @@ function drawAllLinesChart(filteredData) {
     });
   
     const x = d3.scaleTime()
-      .domain(d3.extent(countryData, d => d.date))
+      .domain([globalMinX, globalMaxX])
       .range([0, width]);
   
     const y = d3.scaleLinear()
