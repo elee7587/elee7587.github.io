@@ -74,13 +74,13 @@ d3.csv("data/country_vaccinations.csv").then(data => {
 //first chart
 function drawBarChart(data) {
     const margin = { top: 200, right: 150, bottom: 40, left: 200 };
-    const width = 800 - margin.left - margin.right;
+    const width = 900 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
     
     const svg = d3.select("#viz")
       .append("svg")
-      .attr("viewBox", `0 0 ${1000} ${600}`)
+      .attr("viewBox", `0 0 ${900} ${500}`)
       .attr("preserveAspectRatio", "xMidYMid meet")
       .style("width", "100%")
       .style("height", "auto")
@@ -100,16 +100,16 @@ function drawBarChart(data) {
         .range([0, height])
         .padding(0.2);
   
-    svg.append("g")
+    g.append("g")
         .call(d3.axisLeft(y));
   
-    svg.append("g")
+    g.append("g")
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(x).ticks(5))
         .selectAll("text")
         .style("text-anchor", "middle");
   
-    svg.selectAll("rect")
+    g.selectAll("rect")
         .data(data)
         .enter()
         .append("rect")
@@ -119,7 +119,7 @@ function drawBarChart(data) {
         .attr("height", y.bandwidth())
         .attr("fill", "steelblue");
   
-    svg.selectAll("text.label")
+    g.selectAll("text.label")
         .data(data)
         .enter()
         .append("text")
@@ -130,14 +130,14 @@ function drawBarChart(data) {
         .style("font-size", "12px");
   
     // Add arrow and annotation **after** drawing is complete
-    svg.selectAll("rect").each(function(d) {
+    g.selectAll("rect").each(function(d) {
       if (d.country === "China") {
         const bbox = this.getBBox();
         const cx = bbox.x + bbox.width / 2;
         const cy = bbox.y;
   
         // Add arrowhead marker
-        svg.append("defs").append("marker")
+        g.append("defs").append("marker")
           .attr("id", "arrowhead")
           .attr("viewBox", "0 -5 10 10")
           .attr("refX", 5)
@@ -150,7 +150,7 @@ function drawBarChart(data) {
           .attr("fill", "black");
   
         // Add arrow line
-        svg.append("line")
+        g.append("line")
           .attr("x1", cx)
           .attr("y1", cy - 20)
           .attr("x2", cx)
@@ -160,7 +160,7 @@ function drawBarChart(data) {
           .attr("marker-end", "url(#arrowhead)");
   
         // Add explanatory text
-        svg.append("text")
+        g.append("text")
           .attr("class", "annotation-label")
           .attr("x", cx)
           .attr("y", cy - 30)
@@ -168,7 +168,7 @@ function drawBarChart(data) {
           .text("China has the highest vaccination total at over 3 trillion vaccinations.")
           .style("font-size", "12px")
           .style("font-family", "sans-serif");
-        svg.select(".annotation-label").raise();
+        g.select(".annotation-label").raise();
       }
     });
   }
