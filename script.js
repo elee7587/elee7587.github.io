@@ -159,7 +159,7 @@ function drawBarChart(data) {
           .attr("x", cx)
           .attr("y", cy - 30)
           .attr("text-anchor", "middle")
-          .text("China has the highest vaccination total")
+          .text("China has the highest vaccination total at over 3 trillion vaccinations.")
           .style("font-size", "12px")
           .style("font-family", "sans-serif");
         svg.select(".annotation-label").raise();
@@ -177,7 +177,7 @@ const top15 = Array.from(per100Map.values())
 
 const margin = { top: 30, right: 100, bottom: 40, left: 150 };
 const width = 1300 - margin.left - margin.right;
-const height = 500 - margin.top - margin.bottom;
+const height = 650 - margin.top - margin.bottom;
 
 const svg = d3.select("#viz2")
     .append("svg")
@@ -220,6 +220,47 @@ svg.selectAll("text.label")
     .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
     .text(d => d.perHundred.toFixed(1))
     .style("font-size", "12px");
+    svg.selectAll("rect").each(function(d) {
+        if (d.country === "Gilbraltar") {
+          const bbox = this.getBBox();
+          const cx = bbox.x + bbox.width / 2;
+          const cy = bbox.y;
+    
+          // Add arrowhead marker
+          svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 5)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", "black");
+    
+          // Add arrow line
+          svg.append("line")
+            .attr("x1", cx)
+            .attr("y1", cy - 20)
+            .attr("x2", cx)
+            .attr("y2", cy)
+            .attr("stroke", "black")
+            .attr("stroke-width", 2)
+            .attr("marker-end", "url(#arrowhead)");
+    
+          // Add explanatory text
+          svg.append("text")
+            .attr("class", "annotation-label")
+            .attr("x", cx)
+            .attr("y", cy - 30)
+            .attr("text-anchor", "middle")
+            .text("Gilbraltar has a population of just under 40,000.")
+            .style("font-size", "12px")
+            .style("font-family", "sans-serif");
+          svg.select(".annotation-label").raise();
+        }
+      });
 }
 
 //third graph
