@@ -3,7 +3,7 @@ const countryMap = new Map();
 const per100Map = new Map();
 let latestData = [];
 let per100Data = [];
-
+let globalMaxY;
 let currentScene = 0; // Parameter to track which scene is active
 
 const annotations = [
@@ -59,6 +59,8 @@ d3.csv("data/country_vaccinations.csv").then(data => {
           window.allTopCountries = [...new Set([...topTotalCountries, ...topPer100Countries])];
       
     globalData = data;
+    globalMaxY = d3.max(globalData, d => +d.daily_vaccinations_per_million) * 1.05;
+
     updateScene(); // Initially show scene 0
   });
 //first chart
@@ -198,7 +200,7 @@ function drawAllLinesChart(filteredData) {
       .range([0, width]);
   
     const y = d3.scaleLinear()
-      .domain([0, d3.max(filteredData, d => d.daily_vaccinations_per_million)])
+      .domain([0, globalMaxY])
       .nice()
       .range([height, 0]);
   
@@ -266,7 +268,7 @@ function drawAllLinesChart(filteredData) {
       .range([0, width]);
   
     const y = d3.scaleLinear()
-      .domain([0, d3.max(countryData, d => d.daily_vaccinations_per_million)])
+      .domain([0, globalMaxY])
       .nice()
       .range([height, 0]);
   
