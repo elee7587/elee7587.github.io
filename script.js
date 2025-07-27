@@ -131,7 +131,7 @@ function drawBarChart(data) {
     g.append("text")
         .attr("class", "x axis-label")
         .attr("x", width / 2)             // center horizontally
-        .attr("y", height + margin.bottom - 60)  // below the x-axis ticks
+        .attr("y", height + margin.bottom - 030)  // below the x-axis ticks
         .attr("text-anchor", "middle")    // center text
         .style("font-size", "11px")
         .text("Total Vaccinations");
@@ -177,7 +177,7 @@ function drawBarChart(data) {
         g.append("text")
           .attr("class", "annotation-label")
           .attr("x", cx)
-          .attr("y", cy - 15)
+          .attr("y", cy - 25)
           .attr("text-anchor", "middle")
           .text("China has the highest vaccination total at over 3 trillion vaccinations.")
           .style("font-size", "6px")
@@ -244,13 +244,13 @@ g.selectAll("text.label")
     .attr("x", d => x(d.perHundred) + 5)
     .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
     .text(d => d.perHundred.toFixed(1))
-    .style("font-size", "12px");
+    .style("font-size", "8px");
 g.append("text")
     .attr("class", "x axis-label")
     .attr("x", width / 2)             // center horizontally
     .attr("y", height + margin.bottom - 20)  // below the x-axis ticks
     .attr("text-anchor", "middle")    // center text
-    .style("font-size", "11px")
+    .style("font-size", "9px")
     .text("Vaccinations per 100 People");
 g.append("text")
     .attr("class", "y axis-label")
@@ -258,7 +258,7 @@ g.append("text")
     .attr("y", -margin.left + 15) // position to left of axis
     .attr("transform", "rotate(-90)")
     .attr("text-anchor", "middle")
-    .style("font-size", "11px")
+    .style("font-size", "9px")
     .text("Country");
     g.selectAll("rect").each(function(d) {
         if (d.country === "Gibraltar") {
@@ -307,7 +307,7 @@ g.append("text")
 function drawAllLinesChart(filteredData) {
     d3.select("#viz3").selectAll("*").remove(); // Clear old chart
 
-    const margin = { top: 50, right: 200, bottom: 50, left: 60 };
+    const margin = { top: 50, right: 200, bottom: 100, left: 60 };
     const width = 600 - margin.left - margin.right;
     const height = 350 - margin.top - margin.bottom;
   
@@ -374,7 +374,7 @@ function drawAllLinesChart(filteredData) {
       .attr("x", width / 2)             // center horizontally
       .attr("y", height + margin.bottom - 60)  // below the x-axis ticks
       .attr("text-anchor", "middle")    // center text
-      .style("font-size", "11px")
+      .style("font-size", "9px")
       .text("Month");
     svg.append("text")
       .attr("class", "y axis-label")
@@ -382,7 +382,7 @@ function drawAllLinesChart(filteredData) {
       .attr("y", -margin.left + 15) // position to left of axis
       .attr("transform", "rotate(-90)")
       .attr("text-anchor", "middle")
-      .style("font-size", "11px")
+      .style("font-size", "9px")
       .text("COVID-19 Vacccinations per million");
     // Legend
     svg.selectAll(".legend")
@@ -401,7 +401,7 @@ function drawAllLinesChart(filteredData) {
   
     if (countryData.length === 0) return;
   
-    const margin = { top: 50, right: 200, bottom: 50, left: 60 };
+    const margin = { top: 50, right: 200, bottom: 100, left: 60 };
     const width = 600 - margin.left - margin.right;
     const height = 350 - margin.top - margin.bottom;
   
@@ -454,7 +454,21 @@ function drawAllLinesChart(filteredData) {
       .attr("stroke", "steelblue")
       .attr("stroke-width", 2)
       .attr("d", line);
-    
+    svg.append("text")
+      .attr("class", "x axis-label")
+      .attr("x", width / 2)             // center horizontally
+      .attr("y", height + margin.bottom - 60)  // below the x-axis ticks
+      .attr("text-anchor", "middle")    // center text
+      .style("font-size", "9px")
+      .text("Month");
+    svg.append("text")
+      .attr("class", "y axis-label")
+      .attr("x", -height / 2)       // center along y axis (rotated)
+      .attr("y", -margin.left + 15) // position to left of axis
+      .attr("transform", "rotate(-90)")
+      .attr("text-anchor", "middle")
+      .style("font-size", "9px")
+      .text("COVID-19 Vacccinations per million");
   
     // Title
     svg.append("text")
