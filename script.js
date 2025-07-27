@@ -221,7 +221,7 @@ svg.selectAll("text.label")
     .text(d => d.perHundred.toFixed(1))
     .style("font-size", "12px");
     svg.selectAll("rect").each(function(d) {
-        if (d.country === "Gilbraltar") {
+        if (d.country === "Gibraltar") {
           const bbox = this.getBBox();
           const cx = bbox.x + bbox.width / 2;
           const cy = bbox.y;
