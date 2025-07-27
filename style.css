@@ -53,3 +53,16 @@ display: none;
     cursor: pointer;
   }
   
+  #viz3-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  #controls {
+    flex: 0 0 200px;
+  }
+  
+  #viz3 {
+    flex: 1;
+  }
