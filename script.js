@@ -9,7 +9,7 @@ let currentScene = 0; // Parameter to track which scene is active
 const annotations = [
   "Scene 1: Overview of total COVID-19 vaccinations by country.",
   "Scene 2: Vaccinations per 100 people to adjust for population size.",
-  "Scene 3: Interactive exploration or additional insights can go here."
+  "Scene 3: Daily vaccination trends per million for top countries."
 ];
 
 d3.csv("data/country_vaccinations.csv").then(data => {
@@ -172,7 +172,6 @@ svg.selectAll("text.label")
 
 //third graph
 function drawLineChart(filteredData) {
-    d3.select("#viz").selectAll("*").remove(); // Clear old chart
   
     const margin = { top: 50, right: 200, bottom: 50, left: 60 };
     const width = 1000 - margin.left - margin.right;
@@ -188,7 +187,7 @@ function drawLineChart(filteredData) {
     // Parse dates
     const parseDate = d3.timeParse("%Y-%m-%d");
     filteredData.forEach(d => {
-      d.date = parseDate(d.date);
+        if (typeof d.date === "string") d.date = parseDate(d.date);
       d.daily_vaccinations_per_million = +d.daily_vaccinations_per_million;
     });
   
