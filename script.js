@@ -131,14 +131,14 @@ function drawBarChart(data) {
     g.append("text")
         .attr("class", "x axis-label")
         .attr("x", width / 2)             // center horizontally
-        .attr("y", height + margin.bottom - 5)  // below the x-axis ticks
+        .attr("y", height + margin.bottom -25)  // below the x-axis ticks
         .attr("text-anchor", "middle")    // center text
         .style("font-size", "14px")
         .text("Total Vaccinations");
     g.append("text")
         .attr("class", "y axis-label")
         .attr("x", -height / 2)       // center along y axis (rotated)
-        .attr("y", -margin.left + 5) // position to left of axis
+        .attr("y", -margin.left + 15) // position to left of axis
         .attr("transform", "rotate(-90)")
         .attr("text-anchor", "middle")
         .style("font-size", "14px")
