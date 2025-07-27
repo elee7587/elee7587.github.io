@@ -73,7 +73,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
   });
 //first chart
 function drawBarChart(data) {
-    const margin = { top: 200, right: 150, bottom: 40, left: 200 };
+    const margin = { top: 200, right: 150, bottom: 40, left: 100 };
     const width = 900 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
