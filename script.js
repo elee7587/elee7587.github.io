@@ -347,18 +347,46 @@ function drawCountrySummary(country, data) {
     const table = container.append("table").style("border-collapse", "collapse");
   
     const fields = [
-      { label: "Country", value: latest.country },
-      { label: "Date", value: latest.date },
-      { label: "Total Vaccinations", value: latest.total_vaccinations ? latest.total_vaccinations.toLocaleString() : "N/A" },
-      { 
-        label: "Vaccinations per 100", 
-        value: isNaN(+latest.total_vaccinations_per_hundred) 
-            ? "N/A" 
-            : (+latest.total_vaccinations_per_hundred).toFixed(2) 
-      },
-
-      { label: "Daily Vaccinations per Million", value: latest.daily_vaccinations_per_million ? latest.daily_vaccinations_per_million.toLocaleString() : "N/A" }
-    ];
+        { label: "Country", value: latest.country },
+        { label: "Date", value: latest.date },
+        { label: "Total Vaccinations", value: latest.total_vaccinations || "N/A" },
+        { label: "People Vaccinated", value: latest.people_vaccinated || "N/A" },
+        { label: "People Fully Vaccinated", value: latest.people_fully_vaccinated || "N/A" },
+        { label: "Daily Vaccinations (Raw)", value: latest.daily_vaccinations_raw || "N/A" },
+        { label: "Daily Vaccinations (Smoothed)", value: latest.daily_vaccinations || "N/A" },
+        {
+          label: "Total Vaccinations per 100",
+          value: isNaN(+latest.total_vaccinations_per_hundred)
+            ? "N/A"
+            : (+latest.total_vaccinations_per_hundred).toFixed(2),
+        },
+        {
+          label: "People Vaccinated per 100",
+          value: isNaN(+latest.people_vaccinated_per_hundred)
+            ? "N/A"
+            : (+latest.people_vaccinated_per_hundred).toFixed(2),
+        },
+        {
+          label: "People Fully Vaccinated per 100",
+          value: isNaN(+latest.people_fully_vaccinated_per_hundred)
+            ? "N/A"
+            : (+latest.people_fully_vaccinated_per_hundred).toFixed(2),
+        },
+        {
+          label: "Daily Vaccinations per Million",
+          value: isNaN(+latest.daily_vaccinations_per_million)
+            ? "N/A"
+            : (+latest.daily_vaccinations_per_million).toFixed(2),
+        },
+        { label: "Vaccines Used", value: latest.vaccines || "N/A" },
+        { label: "Source Name", value: latest.source_name || "N/A" },
+        {
+          label: "Source Website",
+          value: latest.source_website
+            ? `<a href="${latest.source_website}" target="_blank">${latest.source_website}</a>`
+            : "N/A",
+        },
+      ];
   
     fields.forEach(f => {
       const row = table.append("tr");
