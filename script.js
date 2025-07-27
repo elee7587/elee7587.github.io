@@ -310,12 +310,9 @@ function drawAllLinesChart(filteredData) {
       .style("cursor", "pointer")
       .style("color", "steelblue")
       .text(d => d)
-      .on("mouseenter", (event, country) => {
+      .on("click", (event, country) => {
         const countryData = data.filter(d => d.country === country);
         drawSingleCountryLine(countryData);
-      })
-      .on("mouseleave", () => {
-        drawAllLinesChart(data);
       });
   }
 
@@ -369,3 +366,8 @@ d3.select("#prevBtn").on("click", () => {
       updateScene();
     }
 });
+
+d3.select("#showAllBtn").on("click", () => {
+    const filteredData = globalData.filter(d => window.allTopCountries.includes(d.country));
+    drawAllLinesChart(filteredData);
+  });
