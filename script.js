@@ -80,7 +80,7 @@ svg.selectAll("rect")
     .attr("x", 0)
     .attr("y", d => y(d.country))
     .attr("width", d => x(d.total))
-    .attr("height", y.bandwidth())
+    .attr("height", y.bandwidth() * .6)
     .attr("fill", "steelblue");
 
 svg.selectAll("text.label")
