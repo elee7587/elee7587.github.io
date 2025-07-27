@@ -55,7 +55,7 @@ const svg = d3.select("#viz")
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-const x = d3.scalelog()
+const x = d3.scaleLog()
     .domain([1, d3.max(data, d => d.total)])
     .range([0, width]);
 
