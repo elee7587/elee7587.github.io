@@ -126,7 +126,7 @@ function drawBarChart(data) {
         .attr("class", "label")
         .attr("x", d => x(d.total) + 5)
         .attr("y", d => y(d.country) + y.bandwidth() / 2 + 5)
-        .text(d => d.total.toLocaleString())
+        .text(d => Math.round(d.total).toLocaleString())
         .style("font-size", "12px");
     g.append("text")
         .attr("class", "x axis-label")
@@ -180,7 +180,7 @@ function drawBarChart(data) {
           .attr("y", cy - 30)
           .attr("text-anchor", "middle")
           .text("China has the highest vaccination total at over 3 trillion vaccinations.")
-          .style("font-size", "12px")
+          .style("font-size", "6px")
           .style("font-family", "sans-serif");
         g.select(".annotation-label").raise();
       }
@@ -457,39 +457,55 @@ function drawCountrySummary(country, data) {
     const fields = [
         { label: "Country", value: latest.country },
         { label: "Date", value: latest.date },
-        { label: "Total Vaccinations", value: latest.total_vaccinations || "N/A" },
-        { label: "People Vaccinated", value: latest.people_vaccinated || "N/A" },
-        { label: "People Fully Vaccinated", value: latest.people_fully_vaccinated || "N/A" },
-        { label: "Daily Vaccinations (Raw)", value: latest.daily_vaccinations_raw || "N/A" },
-        { label: "Daily Vaccinations (Smoothed)", value: latest.daily_vaccinations || "N/A" },
+        {
+          label: "Total Vaccinations",
+          value: latest.total_vaccinations ? Math.round(latest.total_vaccinations).toLocaleString() : "N/A"
+        },
+        {
+          label: "People Vaccinated",
+          value: latest.people_vaccinated ? Math.round(latest.people_vaccinated).toLocaleString() : "N/A"
+        },
+        {
+          label: "People Fully Vaccinated",
+          value: latest.people_fully_vaccinated ? Math.round(latest.people_fully_vaccinated).toLocaleString() : "N/A"
+        },
+        {
+          label: "Daily Vaccinations (Raw)",
+          value: latest.daily_vaccinations_raw ? Math.round(latest.daily_vaccinations_raw).toLocaleString() : "N/A"
+        },
+        {
+          label: "Daily Vaccinations (Smoothed)",
+          value: latest.daily_vaccinations ? Math.round(latest.daily_vaccinations).toLocaleString() : "N/A"
+        },
         {
           label: "Total Vaccinations per 100",
           value: isNaN(+latest.total_vaccinations_per_hundred)
             ? "N/A"
-            : (+latest.total_vaccinations_per_hundred).toFixed(2),
+            : Math.round(+latest.total_vaccinations_per_hundred).toString()
         },
         {
           label: "People Vaccinated per 100",
           value: isNaN(+latest.people_vaccinated_per_hundred)
             ? "N/A"
-            : (+latest.people_vaccinated_per_hundred).toFixed(2),
+            : Math.round(+latest.people_vaccinated_per_hundred).toString()
         },
         {
           label: "People Fully Vaccinated per 100",
           value: isNaN(+latest.people_fully_vaccinated_per_hundred)
             ? "N/A"
-            : (+latest.people_fully_vaccinated_per_hundred).toFixed(2),
+            : Math.round(+latest.people_fully_vaccinated_per_hundred).toString()
         },
         {
           label: "Daily Vaccinations per Million",
           value: isNaN(+latest.daily_vaccinations_per_million)
             ? "N/A"
-            : (+latest.daily_vaccinations_per_million).toFixed(2),
+            : Math.round(+latest.daily_vaccinations_per_million).toLocaleString()
         },
         { label: "Vaccines Used", value: latest.vaccines || "N/A" },
         { label: "Source Name", value: latest.source_name || "N/A" },
-        { label: "Source Website", value: latest.source_website || "N/A" },
+        { label: "Source Website", value: latest.source_website || "N/A" }
       ];
+      
   
     fields.forEach(f => {
       const row = table.append("tr");
