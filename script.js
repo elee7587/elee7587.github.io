@@ -171,7 +171,7 @@ svg.selectAll("text.label")
 }
 
 //third graph
-function drawLineChart(filteredData) {
+function drawAllLinesChart(filteredData) {
   
     const margin = { top: 50, right: 200, bottom: 50, left: 60 };
     const width = 1000 - margin.left - margin.right;
@@ -240,6 +240,85 @@ function drawLineChart(filteredData) {
       .style("fill", d => color(d))
       .style("font-size", "10px");
   }
+  function drawSingleCountryLine(countryData) {
+    d3.select("#viz3").selectAll("*").remove();
+  
+    if (countryData.length === 0) return;
+  
+    const margin = { top: 50, right: 100, bottom: 50, left: 60 };
+    const width = 800 - margin.left - margin.right;
+    const height = 400 - margin.top - margin.bottom;
+  
+    const svg = d3.select("#viz3")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+  
+    const parseDate = d3.timeParse("%Y-%m-%d");
+    countryData.forEach(d => {
+      if (typeof d.date === "string") d.date = parseDate(d.date);
+      d.daily_vaccinations_per_million = +d.daily_vaccinations_per_million;
+    });
+  
+    const x = d3.scaleTime()
+      .domain(d3.extent(countryData, d => d.date))
+      .range([0, width]);
+  
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(countryData, d => d.daily_vaccinations_per_million)])
+      .nice()
+      .range([height, 0]);
+  
+    // Axes
+    svg.append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .call(d3.axisBottom(x));
+  
+    svg.append("g")
+      .call(d3.axisLeft(y));
+  
+    // Line generator
+    const line = d3.line()
+      .x(d => x(d.date))
+      .y(d => y(d.daily_vaccinations_per_million));
+  
+    svg.append("path")
+      .datum(countryData.sort((a, b) => a.date - b.date))
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 2)
+      .attr("d", line);
+  
+    // Title
+    svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", -20)
+      .attr("text-anchor", "middle")
+      .style("font-size", "16px")
+      .text(countryData[0].country);
+  }
+  function drawCountryList(countries, data) {
+    const container = d3.select("#country-list");
+    container.selectAll("*").remove();
+  
+    container.selectAll("div")
+      .data(countries)
+      .enter()
+      .append("div")
+      .style("padding", "5px")
+      .style("cursor", "pointer")
+      .style("color", "steelblue")
+      .text(d => d)
+      .on("mouseenter", (event, country) => {
+        const countryData = data.filter(d => d.country === country);
+        drawSingleCountryLine(countryData);
+      })
+      .on("mouseleave", () => {
+        drawAllLinesChart(data);
+      });
+  }
 
 function clearCharts() {
     d3.select("#viz").selectAll("*").remove();
@@ -263,12 +342,14 @@ function updateScene() {
       d3.select("#scene2-content").style("display", "block");
       d3.select("#scene3-content").style("display", "none");
       drawBarChartPerHundred(per100Data);
-    } else if (currentScene === 2){
-      d3.select("#scene1-content").style("display", "none");
-      d3.select("#scene2-content").style("display", "none");
-      d3.select("#scene3-content").style("display", "block");
-      drawLineChart(globalData.filter(d => window.allTopCountries.includes(d.country)));
-    } else {
+    } else if (currentScene === 2) {
+        d3.select("#scene1-content").style("display", "none");
+        d3.select("#scene2-content").style("display", "none");
+        d3.select("#scene3-content").style("display", "block");
+        const filteredData = globalData.filter(d => window.allTopCountries.includes(d.country));
+        drawCountryList(window.allTopCountries, filteredData);
+        drawAllLinesChart(filteredData);
+      } else {
       d3.select("#scene1-content").style("display", "none");
       d3.select("#scene2-content").style("display", "none");
       d3.select("#scene3-content").style("display", "none");
