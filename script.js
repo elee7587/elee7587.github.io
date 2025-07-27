@@ -11,7 +11,8 @@ let currentScene = 0; // Parameter to track which scene is active
 const annotations = [
   "Scene 1: Overview of total COVID-19 vaccinations by country.",
   "Scene 2: Vaccinations per 100 people to adjust for population size.",
-  "Scene 3: Daily vaccination trends per million for top countries."
+  "Scene 3: Daily vaccination trends per million for top countries.",
+  "Scene 4: Summary of key vaccination information by country."
 ];
 
 d3.csv("data/country_vaccinations.csv").then(data => {
@@ -246,6 +247,7 @@ function drawAllLinesChart(filteredData) {
       .style("fill", d => color(d))
       .style("font-size", "10px");
   }
+  //third chart but single graph
   function drawSingleCountryLine(countryData) {
     d3.select("#viz3").selectAll("*").remove();
   
@@ -322,6 +324,49 @@ function drawAllLinesChart(filteredData) {
         drawSingleCountryLine(countryData);
       });
   }
+// Fourth scene: summary
+function drawSummaryInfo(data) {
+    // Clear old content
+    d3.select("#summary-info").selectAll("*").remove();
+  
+    // Group data by country (latest record per country)
+    const latestByCountry = d3.rollup(
+      data,
+      v => v[v.length - 1], // latest record (assuming data sorted by date)
+      d => d.country
+    );
+  
+    const container = d3.select("#summary-info");
+  
+    // Create a table to summarize info
+    const table = container.append("table").style("border-collapse", "collapse");
+  
+    // Header
+    const header = table.append("thead").append("tr");
+    ["Country", "Date", "Total Vaccinations", "Vaccinations per 100", "Daily Vaccinations per Million"].forEach(text => {
+      header.append("th")
+        .text(text)
+        .style("border", "1px solid #ccc")
+        .style("padding", "5px")
+        .style("background-color", "#eee");
+    });
+  
+    // Body
+    const tbody = table.append("tbody");
+  
+    for (const [country, record] of latestByCountry) {
+      const row = tbody.append("tr");
+      row.append("td").text(country).style("border", "1px solid #ccc").style("padding", "5px");
+      row.append("td").text(record.date).style("border", "1px solid #ccc").style("padding", "5px");
+      row.append("td").text(record.total_vaccinations ? record.total_vaccinations.toLocaleString() : "N/A")
+        .style("border", "1px solid #ccc").style("padding", "5px");
+      row.append("td").text(record.total_vaccinations_per_hundred ? record.total_vaccinations_per_hundred.toFixed(2) : "N/A")
+        .style("border", "1px solid #ccc").style("padding", "5px");
+      row.append("td").text(record.daily_vaccinations_per_million ? record.daily_vaccinations_per_million.toLocaleString() : "N/A")
+        .style("border", "1px solid #ccc").style("padding", "5px");
+    }
+  }
+  
 
 function clearCharts() {
     d3.select("#viz").selectAll("*").remove();
@@ -334,25 +379,25 @@ function updateScene() {
   
     // Update annotation text
     d3.select("#annotation").text(annotations[currentScene]);
-  
+    d3.select("#scene1-content").style("display", "none");
+    d3.select("#scene2-content").style("display", "none");
+    d3.select("#scene3-content").style("display", "none");
+    d3.select("#scene4-content").style("display", "none");
     if (currentScene === 0) {
       d3.select("#scene1-content").style("display", "block");
-      d3.select("#scene2-content").style("display", "none");
-      d3.select("#scene3-content").style("display", "none");
       drawBarChart(latestData);
     } else if (currentScene === 1) {
-      d3.select("#scene1-content").style("display", "none");
       d3.select("#scene2-content").style("display", "block");
-      d3.select("#scene3-content").style("display", "none");
       drawBarChartPerHundred(per100Data);
     } else if (currentScene === 2) {
-        d3.select("#scene1-content").style("display", "none");
-        d3.select("#scene2-content").style("display", "none");
         d3.select("#scene3-content").style("display", "block");
         const filteredData = globalData.filter(d => window.allTopCountries.includes(d.country));
         drawCountryList(window.allTopCountries, filteredData);
         drawAllLinesChart(filteredData);
-      } else {
+    } else if (currentScene === 3) {
+        d3.select("#scene4-content").style("display", "block");
+        drawSummaryInfo(globalData);
+    } else {
       d3.select("#scene1-content").style("display", "none");
       d3.select("#scene2-content").style("display", "none");
       d3.select("#scene3-content").style("display", "none");
