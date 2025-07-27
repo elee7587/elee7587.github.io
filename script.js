@@ -73,7 +73,7 @@ d3.csv("data/country_vaccinations.csv").then(data => {
   });
 //first chart
 function drawBarChart(data) {
-    const margin = { top: 50, right: 150, bottom: 100, left: 100 };
+    const margin = { top: 50, right: 150, bottom: 50, left: 100 };
     const width = 600 - margin.left - margin.right;
     const height = 350 - margin.top - margin.bottom;
 
@@ -177,7 +177,7 @@ function drawBarChart(data) {
         g.append("text")
           .attr("class", "annotation-label")
           .attr("x", cx)
-          .attr("y", cy - 45)
+          .attr("y", cy - 15)
           .attr("text-anchor", "middle")
           .text("China has the highest vaccination total at over 3 trillion vaccinations.")
           .style("font-size", "6px")
@@ -195,7 +195,7 @@ const top15 = Array.from(per100Map.values())
     .sort((a, b) => b.perHundred - a.perHundred)
     .slice(0, 15);
 
-const margin = { top: 30, right: 100, bottom: 100, left: 150 };
+const margin = { top: 30, right: 100, bottom: 50, left: 150 };
 const width = 600 - margin.left - margin.right;
 const height = 350 - margin.top - margin.bottom;
 
@@ -308,8 +308,8 @@ function drawAllLinesChart(filteredData) {
     d3.select("#viz3").selectAll("*").remove(); // Clear old chart
 
     const margin = { top: 50, right: 200, bottom: 50, left: 60 };
-    const width = 800 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
+    const width = 600 - margin.left - margin.right;
+    const height = 350 - margin.top - margin.bottom;
   
     const svg = d3.select("#viz3")
         .append("svg")
@@ -369,7 +369,21 @@ function drawAllLinesChart(filteredData) {
       .attr("stroke", d => color(d[0]))
       .attr("stroke-width", 1.5)
       .attr("d", d => line(d[1].sort((a, b) => a.date - b.date)));
-  
+    svg.append("text")
+      .attr("class", "x axis-label")
+      .attr("x", width / 2)             // center horizontally
+      .attr("y", height + margin.bottom - 60)  // below the x-axis ticks
+      .attr("text-anchor", "middle")    // center text
+      .style("font-size", "11px")
+      .text("Month");
+    svg.append("text")
+      .attr("class", "y axis-label")
+      .attr("x", -height / 2)       // center along y axis (rotated)
+      .attr("y", -margin.left + 15) // position to left of axis
+      .attr("transform", "rotate(-90)")
+      .attr("text-anchor", "middle")
+      .style("font-size", "11px")
+      .text("COVID-19 Vacccinations per million");
     // Legend
     svg.selectAll(".legend")
       .data(dataByCountry.map(d => d[0]))
@@ -388,8 +402,8 @@ function drawAllLinesChart(filteredData) {
     if (countryData.length === 0) return;
   
     const margin = { top: 50, right: 200, bottom: 50, left: 60 };
-    const width = 800 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
+    const width = 600 - margin.left - margin.right;
+    const height = 350 - margin.top - margin.bottom;
   
     const svg = d3.select("#viz3")
         .append("svg")
@@ -440,6 +454,7 @@ function drawAllLinesChart(filteredData) {
       .attr("stroke", "steelblue")
       .attr("stroke-width", 2)
       .attr("d", line);
+    
   
     // Title
     svg.append("text")
