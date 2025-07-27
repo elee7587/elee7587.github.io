@@ -380,12 +380,7 @@ function drawCountrySummary(country, data) {
         },
         { label: "Vaccines Used", value: latest.vaccines || "N/A" },
         { label: "Source Name", value: latest.source_name || "N/A" },
-        {
-          label: "Source Website",
-          value: latest.source_website
-            ? `<a href="${latest.source_website}" target="_blank">${latest.source_website}</a>`
-            : "N/A",
-        },
+        { label: "Source Website", value: latest.source_website || "N/A" },
       ];
   
     fields.forEach(f => {
@@ -436,6 +431,7 @@ function updateScene() {
     d3.select("#scene2-content").style("display", "none");
     d3.select("#scene3-content").style("display", "none");
     d3.select("#scene4-content").style("display", "none");
+    d3.select("#intro-par").style("display", "none");
     if (currentScene === 0) {
       d3.select("#scene1-content").style("display", "block");
       drawBarChart(latestData);
