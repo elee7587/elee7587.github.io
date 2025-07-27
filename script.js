@@ -6,7 +6,8 @@ let per100Data = [];
 let globalMaxY;
 let globalMaxX;
 let globalMinX;
-let currentScene = 0; // Parameter to track which scene is active
+let currentScene = 0; 
+let globalData;
 
 const annotations = [
   "Scene 1: Overview of total COVID-19 vaccinations by country.",
@@ -325,48 +326,65 @@ function drawAllLinesChart(filteredData) {
       });
   }
 // Fourth scene: summary
-function drawSummaryInfo(data) {
-    // Clear old content
-    d3.select("#summary-info").selectAll("*").remove();
-  
-    // Group data by country (latest record per country)
-    const latestByCountry = d3.rollup(
-      data,
-      v => v[v.length - 1], // latest record (assuming data sorted by date)
-      d => d.country
-    );
-  
+function drawCountrySummary(country, data) {
     const container = d3.select("#summary-info");
+    container.selectAll("*").remove();
   
-    // Create a table to summarize info
+    // Filter for the country's records, find the latest date
+    const countryData = data.filter(d => d.country === country);
+    if (countryData.length === 0) {
+      container.append("p").text("No data available");
+      return;
+    }
+  
+    // Sort by date ascending
+    countryData.sort((a, b) => d3.ascending(a.date, b.date));
+  
+    const latest = countryData[countryData.length - 1];
+  
+    // Create a simple table to show latest stats for the country
     const table = container.append("table").style("border-collapse", "collapse");
   
-    // Header
-    const header = table.append("thead").append("tr");
-    ["Country", "Date", "Total Vaccinations", "Vaccinations per 100", "Daily Vaccinations per Million"].forEach(text => {
-      header.append("th")
-        .text(text)
+    const fields = [
+      { label: "Country", value: latest.country },
+      { label: "Date", value: latest.date },
+      { label: "Total Vaccinations", value: latest.total_vaccinations ? latest.total_vaccinations.toLocaleString() : "N/A" },
+      { label: "Vaccinations per 100", value: latest.total_vaccinations_per_hundred ? latest.total_vaccinations_per_hundred.toFixed(2) : "N/A" },
+      { label: "Daily Vaccinations per Million", value: latest.daily_vaccinations_per_million ? latest.daily_vaccinations_per_million.toLocaleString() : "N/A" }
+    ];
+  
+    fields.forEach(f => {
+      const row = table.append("tr");
+      row.append("td")
+        .text(f.label)
         .style("border", "1px solid #ccc")
         .style("padding", "5px")
-        .style("background-color", "#eee");
+        .style("font-weight", "bold");
+      row.append("td")
+        .text(f.value)
+        .style("border", "1px solid #ccc")
+        .style("padding", "5px");
     });
-  
-    // Body
-    const tbody = table.append("tbody");
-  
-    for (const [country, record] of latestByCountry) {
-      const row = tbody.append("tr");
-      row.append("td").text(country).style("border", "1px solid #ccc").style("padding", "5px");
-      row.append("td").text(record.date).style("border", "1px solid #ccc").style("padding", "5px");
-      row.append("td").text(record.total_vaccinations ? record.total_vaccinations.toLocaleString() : "N/A")
-        .style("border", "1px solid #ccc").style("padding", "5px");
-      row.append("td").text(record.total_vaccinations_per_hundred ? record.total_vaccinations_per_hundred.toFixed(2) : "N/A")
-        .style("border", "1px solid #ccc").style("padding", "5px");
-      row.append("td").text(record.daily_vaccinations_per_million ? record.daily_vaccinations_per_million.toLocaleString() : "N/A")
-        .style("border", "1px solid #ccc").style("padding", "5px");
-    }
   }
+
+  //draw clickable country list
+function drawSummaryCountryList(countries, data) {
+    const container = d3.select("#summary-country-list");
+    container.selectAll("*").remove();
   
+    container.selectAll("div")
+      .data(countries)
+      .enter()
+      .append("div")
+      .style("padding", "5px")
+      .style("cursor", "pointer")
+      .style("color", "steelblue")
+      .style("border-bottom", "1px solid #eee")
+      .text(d => d)
+      .on("click", (event, country) => {
+        drawCountrySummary(country, data);
+      });
+}
 
 function clearCharts() {
     d3.select("#viz").selectAll("*").remove();
@@ -395,8 +413,12 @@ function updateScene() {
         drawCountryList(window.allTopCountries, filteredData);
         drawAllLinesChart(filteredData);
     } else if (currentScene === 3) {
-        d3.select("#scene4-content").style("display", "block");
-        drawSummaryInfo(globalData);
+        d3.select("#scene4-content").style("display", "flex");
+        const countries = Array.from(new Set(globalData.map(d => d.country))).sort();
+        drawSummaryCountryList(countries, globalData);
+        if (countries.length > 0) {
+            drawCountrySummary(countries[0], globalData);
+        }
     } else {
       d3.select("#scene1-content").style("display", "none");
       d3.select("#scene2-content").style("display", "none");
