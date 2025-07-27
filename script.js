@@ -177,7 +177,7 @@ function drawBarChart(data) {
         g.append("text")
           .attr("class", "annotation-label")
           .attr("x", cx)
-          .attr("y", cy - 30)
+          .attr("y", cy - 45)
           .attr("text-anchor", "middle")
           .text("China has the highest vaccination total at over 3 trillion vaccinations.")
           .style("font-size", "6px")
@@ -196,13 +196,13 @@ const top15 = Array.from(per100Map.values())
     .slice(0, 15);
 
 const margin = { top: 30, right: 100, bottom: 100, left: 150 };
-const width = 800 - margin.left - margin.right;
-const height = 500 - margin.top - margin.bottom;
+const width = 600 - margin.left - margin.right;
+const height = 350 - margin.top - margin.bottom;
 
 
 const svg = d3.select("#viz2")
     .append("svg")
-    .attr("viewBox", `0 0 ${800} ${500}`)
+    .attr("viewBox", `0 0 ${600} ${350}`)
     .attr("preserveAspectRatio", "xMidYMid meet")
     .style("width", "100%")
     .style("height", "auto")
@@ -248,7 +248,7 @@ g.selectAll("text.label")
 g.append("text")
     .attr("class", "x axis-label")
     .attr("x", width / 2)             // center horizontally
-    .attr("y", height + margin.bottom - 30)  // below the x-axis ticks
+    .attr("y", height + margin.bottom - 20)  // below the x-axis ticks
     .attr("text-anchor", "middle")    // center text
     .style("font-size", "11px")
     .text("Vaccinations per 100 People");
@@ -343,9 +343,15 @@ function drawAllLinesChart(filteredData) {
       .range(d3.schemeCategory10.concat(d3.schemeSet3));
   
     // Axes
+    // Axes
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end")
+      .attr("dx", "-0.8em")            
+      .attr("dy", "0.15em");  
   
     svg.append("g")
       .call(d3.axisLeft(y));
@@ -413,7 +419,12 @@ function drawAllLinesChart(filteredData) {
     // Axes
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
-      .call(d3.axisBottom(x));
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end")
+      .attr("dx", "-0.8em")            
+      .attr("dy", "0.15em");  
   
     svg.append("g")
       .call(d3.axisLeft(y));
