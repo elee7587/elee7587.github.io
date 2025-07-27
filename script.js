@@ -131,7 +131,7 @@ function drawBarChart(data) {
     g.append("text")
         .attr("class", "x axis-label")
         .attr("x", width / 2)             // center horizontally
-        .attr("y", height + margin.bottom - 030)  // below the x-axis ticks
+        .attr("y", height + margin.bottom - 30)  // below the x-axis ticks
         .attr("text-anchor", "middle")    // center text
         .style("font-size", "11px")
         .text("Total Vaccinations");
@@ -372,10 +372,10 @@ function drawAllLinesChart(filteredData) {
     svg.append("text")
       .attr("class", "x axis-label")
       .attr("x", width / 2)             // center horizontally
-      .attr("y", height + margin.bottom - 60)  // below the x-axis ticks
+      .attr("y", height + margin.bottom - 40)  // below the x-axis ticks
       .attr("text-anchor", "middle")    // center text
       .style("font-size", "9px")
-      .text("Month");
+      .text("Date");
     svg.append("text")
       .attr("class", "y axis-label")
       .attr("x", -height / 2)       // center along y axis (rotated)
@@ -393,7 +393,7 @@ function drawAllLinesChart(filteredData) {
       .attr("y", (d, i) => i * 15)
       .text(d => d)
       .style("fill", d => color(d))
-      .style("font-size", "10px");
+      .style("font-size", "8px");
   }
   //third chart but single graph
   function drawSingleCountryLine(countryData) {
@@ -457,10 +457,10 @@ function drawAllLinesChart(filteredData) {
     svg.append("text")
       .attr("class", "x axis-label")
       .attr("x", width / 2)             // center horizontally
-      .attr("y", height + margin.bottom - 60)  // below the x-axis ticks
+      .attr("y", height + margin.bottom - 40)  // below the x-axis ticks
       .attr("text-anchor", "middle")    // center text
       .style("font-size", "9px")
-      .text("Month");
+      .text("Date");
     svg.append("text")
       .attr("class", "y axis-label")
       .attr("x", -height / 2)       // center along y axis (rotated)
