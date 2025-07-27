@@ -2,9 +2,10 @@
 body {
     font-family: 'Helvetica Neue', sans-serif;
     margin: 0;
+    justify-content: center;
     padding: 20px;
     line-height: 1.6;
-    background-color: #fafafa;
+    background-color:lightblue;
     color: #333;
   }
 #scene1-content {
