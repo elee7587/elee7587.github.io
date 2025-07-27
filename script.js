@@ -1,6 +1,7 @@
 // Load data
 const countryMap = new Map();
 const per100Map = new Map();
+let countrySummaryMap = new Map();
 let latestData = [];
 let per100Data = [];
 let globalMaxY;
@@ -349,7 +350,13 @@ function drawCountrySummary(country, data) {
       { label: "Country", value: latest.country },
       { label: "Date", value: latest.date },
       { label: "Total Vaccinations", value: latest.total_vaccinations ? latest.total_vaccinations.toLocaleString() : "N/A" },
-      { label: "Vaccinations per 100", value: latest.total_vaccinations_per_hundred ? latest.total_vaccinations_per_hundred.toFixed(2) : "N/A" },
+      { 
+        label: "Vaccinations per 100", 
+        value: isNaN(+latest.total_vaccinations_per_hundred) 
+            ? "N/A" 
+            : (+latest.total_vaccinations_per_hundred).toFixed(2) 
+      },
+
       { label: "Daily Vaccinations per Million", value: latest.daily_vaccinations_per_million ? latest.daily_vaccinations_per_million.toLocaleString() : "N/A" }
     ];
   
