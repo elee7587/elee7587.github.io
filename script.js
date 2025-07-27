@@ -172,7 +172,8 @@ svg.selectAll("text.label")
 
 //third graph
 function drawAllLinesChart(filteredData) {
-  
+    d3.select("#viz3").selectAll("*").remove(); // Clear old chart
+
     const margin = { top: 50, right: 200, bottom: 50, left: 60 };
     const width = 1000 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
@@ -184,14 +185,12 @@ function drawAllLinesChart(filteredData) {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
   
-    // Parse dates
     const parseDate = d3.timeParse("%Y-%m-%d");
     filteredData.forEach(d => {
-        if (typeof d.date === "string") d.date = parseDate(d.date);
+      if (typeof d.date === "string") d.date = parseDate(d.date);
       d.daily_vaccinations_per_million = +d.daily_vaccinations_per_million;
     });
   
-    // Nest data by country
     const dataByCountry = d3.groups(filteredData, d => d.country);
   
     const x = d3.scaleTime()
@@ -207,7 +206,7 @@ function drawAllLinesChart(filteredData) {
       .domain(window.allTopCountries)
       .range(d3.schemeCategory10.concat(d3.schemeSet3));
   
-    // Add axes
+    // Axes
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(x));
@@ -215,7 +214,7 @@ function drawAllLinesChart(filteredData) {
     svg.append("g")
       .call(d3.axisLeft(y));
   
-    // Draw lines
+    // Draw all lines
     const line = d3.line()
       .x(d => x(d.date))
       .y(d => y(d.daily_vaccinations_per_million));
