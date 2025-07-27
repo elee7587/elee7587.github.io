@@ -155,12 +155,14 @@ function drawBarChart(data) {
   
         // Add explanatory text
         svg.append("text")
+          .attr("class", "annotation-label")
           .attr("x", cx)
-          .attr("y", cy - 60)
+          .attr("y", cy - 30)
           .attr("text-anchor", "middle")
           .text("China has the highest vaccination total")
           .style("font-size", "12px")
           .style("font-family", "sans-serif");
+        svg.select(".annotation-label").raise();
       }
     });
   }
