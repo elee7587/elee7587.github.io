@@ -42,7 +42,7 @@ display: none;
   
   /* Make SVG elements responsive */
   svg {
-    max-width: 80%;
+    max-width: 70%;
     height: auto;
   }
   
