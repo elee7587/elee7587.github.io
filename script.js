@@ -107,7 +107,11 @@ function drawBarChart(data) {
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(x).ticks(5))
         .selectAll("text")
-        .style("text-anchor", "middle");
+        .attr("transform", "rotate(-45)")
+        .style("text-anchor", "end")
+        .attr("dx", "-0.8em")            
+        .attr("dy", "0.15em");  
+
   
     g.selectAll("rect")
         .data(data)
