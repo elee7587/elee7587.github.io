@@ -183,7 +183,7 @@ function drawBarChart(data) {
           .attr("x", cx)
           .attr("y", cy - 25)
           .attr("text-anchor", "middle")
-          .text("China has the highest vaccination total at over 3 trillion vaccinations.")
+          .text("China has the highest vaccination total at over 3 billion vaccinations.")
           .style("font-size", "6px")
           .style("font-family", "sans-serif");
         g.select(".annotation-label").raise();
