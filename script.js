@@ -135,7 +135,7 @@ function drawBarChart(data) {
     g.append("text")
         .attr("class", "x axis-label")
         .attr("x", width / 2)             // center horizontally
-        .attr("y", height + margin.bottom - 15)  // below the x-axis ticks
+        .attr("y", height + margin.bottom - 5)  // below the x-axis ticks
         .attr("text-anchor", "middle")    // center text
         .style("font-size", "11px")
         .text("Total Vaccinations");
